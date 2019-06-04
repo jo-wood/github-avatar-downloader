@@ -1,6 +1,8 @@
 # secrets/tokens
 secrets.js
 
+avatars/
+
 # Logs
 logs
 *.log
