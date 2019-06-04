@@ -1,44 +1,69 @@
-
 var request = require('request');
 var secrets = require('./secrets');
+
 var credentials = secrets.GITHUB_TOKEN;
 var repoOwner = 'jquery';
 var repoName = 'jquery';
 
-var requestOptions = {
-    url: 'https://api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors',
-    headers: {
-      'User-Agent': 'request',
-      'Authorization': credentials
-    },
-
+var options = {
+  url: 'https://api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors',
+  headers: {
+    'User-Agent': 'request',
+    'Authorization': credentials
+  }
 };
 
 
-function getRepoContributors(options, cb) {
-
-  request(options, function(err, res, body){
+function getRepoContributors(req, cb) {
+  request(req, function(err, res, body){
     cb(err, body)
-  });
+  }); 
+}
+
+function downloadImageByURL(url, filepath) {
+
+  // for (var link of url){
+console.log(url);
+
+  // }
 
 }
 
-
- getRepoContributors(requestOptions, function(err, result) {
+getRepoContributors(options, function (err, result) {
   console.log('Errors: ', err);
   var contributors = JSON.parse(result);
   var avatarArray = [];
 
-  for (var user of contributors){
+  for (var user of contributors) {
     avatarArray.push(user.avatar_url);
   }
-  console.log(avatarArray);
-  
-return avatarArray;
-});
+
+  downloadImageByURL(avatarArray);
+
+
+}, downloadImageByURL);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //* snippet of returning avatar urls (request limit reached therefore not returning these - use for now:)
+//* this wasn't working because the authentication was wrong and using only generic user-agent request
+//* needed to change token password to include token space, then the password not username 
   // https: //avatars0.githubusercontent.com/u/1615?v=4
   // https: //avatars3.githubusercontent.com/u/192451?v=4
   // https: //avatars2.githubusercontent.com/u/157858?v=4
