@@ -23,21 +23,29 @@ function getRepoContributors(req, cb) {
   }); 
 }
 
+if (repoOwner && repoName){
+  getRepoContributors(options, function (err, result) {
+    console.log('Errors: ', err);
+    var contributors = JSON.parse(result); //***** the anon cb fn loops through the returned JSON object creating:
+    var avatarArray = []; //***** the urls where the avatar image can be accessed
+    var imagePathArray = []; //*****  array of filepath strings for corresponding users avatar url in avatarArray
 
-getRepoContributors(options, function (err, result) {
-  console.log('Errors: ', err);
-  var contributors = JSON.parse(result); //***** the anon cb fn loops through the returned JSON object creating:
-  var avatarArray = []; //***** the urls where the avatar image can be accessed
-  var imagePathArray = []; //*****  array of filepath strings for corresponding users avatar url in avatarArray
+    for (var user of contributors) {
+      avatarArray.push(user.avatar_url);
+      imagePathArray.push('./avatars/' + user.login + '.jpg'); //*****  a filepath extension that set a unique filename based on 
+    }
 
-  for (var user of contributors) {
-    avatarArray.push(user.avatar_url);
-    imagePathArray.push('./avatars/' + user.login + '.jpg'); //*****  a filepath extension that set a unique filename based on 
-  }
+    downloadImageByURL(avatarArray, imagePathArray); //*****  the avatar urls and filepath are then passed to cb fn that dwnlds to disk
 
-  downloadImageByURL(avatarArray, imagePathArray); //*****  the avatar urls and filepath are then passed to cb fn that dwnlds to disk
+  }, downloadImageByURL);
+} else {
+  console.log('\n');
+  console.log('*****');
+  console.log('Must pass repoOwner and repoName as arguments to the node file from command line, respectively...\n');
+  console.log('    ie:  node download-repoContributors jquery jquery \n'); 
+  console.log('*****');
+}
 
-}, downloadImageByURL);
 
 
 
