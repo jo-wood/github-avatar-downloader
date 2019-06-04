@@ -1,4 +1,6 @@
 var request = require('request');
+var fs = require('fs');
+
 var secrets = require('./secrets');
 
 var credentials = secrets.GITHUB_TOKEN;
@@ -20,25 +22,27 @@ function getRepoContributors(req, cb) {
   }); 
 }
 
-function downloadImageByURL(url, filepath) {
+function downloadImageByURL(url, user, filepath) {
 
-  // for (var link of url){
-console.log(url);
-
-  // }
-
+  for (var link of url){
+    for (var login of user) {
+    fs.createWriteStream(filepath + login  + '.jpg');
+    }
+  }
 }
 
 getRepoContributors(options, function (err, result) {
   console.log('Errors: ', err);
   var contributors = JSON.parse(result);
   var avatarArray = [];
+  var userArray = [];
 
   for (var user of contributors) {
     avatarArray.push(user.avatar_url);
+    userArray.push(user.login);
   }
 
-  downloadImageByURL(avatarArray);
+  downloadImageByURL(avatarArray, userArray, "./avatars/");
 
 
 }, downloadImageByURL);
