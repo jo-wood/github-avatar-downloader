@@ -4,8 +4,8 @@ var downloadImageByURL = require('./downloadImg.js'); //***** cb fn for getRepoC
 var secrets = require('./secrets');
 
 var credentials = secrets.GITHUB_TOKEN;
-var repoOwner = 'jquery';
-var repoName = 'jquery';
+var repoOwner = process.argv[2];
+var repoName = process.argv[3];
 
 var options = {
   url: 'https://api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors',
